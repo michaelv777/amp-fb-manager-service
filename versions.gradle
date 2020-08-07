@@ -1,0 +1,15 @@
+ext
+{
+	jaxb_api_version="2.3.1"
+	apache_commons_version="3.5"
+	jackson_core_version="2.10.0"
+	sl4j_version="1.7.30"
+	log4j2_version="2.13.1"
+	aws_pa_client_rest_version="0.0.1-SNAPSHOT"
+	hibernate_version="5.4.12.Final"
+	mysql_connector_java_version="5.1.48"
+	c3p0_version="0.9.5.3"
+	guava_version="18.0"
+	reflections_version="0.9.9-RC1"
+	servletApiVersion="4.0.1"
+}

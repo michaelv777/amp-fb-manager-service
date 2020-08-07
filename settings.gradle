@@ -1,0 +1,8 @@
+rootProject.name = 'amp-fb-manager-service'
+
+include 'amp-jpa-entities'
+include 'amp-service-restmodel'
+include 'amp-text-processor-api'
+include 'amp-fb-restfb-api'
+include 'amp-common-api'
+include 'amp-data-handler'

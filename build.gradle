@@ -1,0 +1,98 @@
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+apply plugin: 'war'
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin: 'project-report'
+apply plugin: 'maven-publish'
+
+apply from: './versions.gradle'
+
+war {
+	//group = 'amp.service.common'
+    archiveName = "amp-fb-manager-service.war"
+	baseName = "amp-fb-manager-service"
+	rootSpec.exclude("**/log4j2.properties")
+}
+
+group = 'amp.service.common'
+//archivesBaseName = 'amp-fb-manager-service'
+version = '0.0.1-SNAPSHOT'
+description = """amp-fb-manager-service"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+configurations.all {
+	exclude group: "log4j", module:"log4j"
+	exclude group: "org.slf4j", module:"slf4j-simple"
+	exclude group: 'commons-logging', module: 'commons-logging'
+	exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    exclude module: 'logback-classic'
+}
+
+evaluationDependsOn(':amp-jpa-entities')
+evaluationDependsOn(':amp-service-restmodel')
+evaluationDependsOn(':amp-text-processor-api')
+evaluationDependsOn(':amp-fb-restfb-api')
+evaluationDependsOn(':amp-common-api')
+evaluationDependsOn(':amp-data-handler')
+
+dependencies {
+	compile group: 'amp.service.common', name: 'amp-jpa-entities', version:'0.0.1-SNAPSHOT'
+	compile group: 'amp.service.common', name: 'amp-service-restmodel', version:'0.0.1-SNAPSHOT'
+    compile group: 'amp.service.common', name: 'amp-common-api', version:'0.0.1-SNAPSHOT'
+    compile group: 'amp.service.common', name: 'amp-data-handler', version:'0.0.1-SNAPSHOT'
+    compile group: 'amp.service.common', name: 'amp-fb-restfb-api', version:'0.0.1-SNAPSHOT'
+    compile group: 'amp.service.common', name: 'amp-text-processor-api', version:'0.0.1-SNAPSHOT'
+    
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    implementation "org.springframework.boot:spring-boot-starter-log4j2:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion"
+    compile("org.springframework.boot:spring-boot-starter-aop:$springBootVersion")
+        
+    compile group: "org.springframework.boot", name: "spring-boot-configuration-processor", version:"$springBootVersion"
+    compile group: 'org.springframework', name: 'spring-webmvc', version: "$springMvcVersion"
+        
+    //Logging API
+	compile group: 'org.slf4j' , name: 'slf4j-api', version: "$sl4j_version"
+	//Logging log4j2 implementation for logging API above
+	compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: "$log4j2_version"
+	//Logging log4j2 Commons Logging Bridge
+	compile group: 'org.apache.logging.log4j', name: 'log4j-jcl', version: "$log4j2_version"
+
+    compile group: 'junit', name: 'junit', version:'4.12'
+    
+    compile group: 'javax.enterprise.concurrent', name: 'javax.enterprise.concurrent-api', version:'1.0'
+    
+     // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.12'
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.0'
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0'
+	
+    compile group: 'javax.mail', name: 'mail', version:'1.4'
+    
+    testCompile "org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion"
+    testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+        
+    testCompile "com.h2database:h2:$h2Version"
+    testCompile "junit:junit:$junitVersion"
+
+    providedCompile "javax.servlet:javax.servlet-api:$servletApiVersion"
+}
+
+configurations {
+    compile.exclude group: 'com.netflix'
+}
+
+defaultTasks 'clean','build', 'htmlDependencyReport', 'publishToMavenLocal', 'publish'
